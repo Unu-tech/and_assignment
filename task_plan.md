@@ -18,3 +18,8 @@
     - [Baidu's paper](https://arxiv.org/pdf/1904.09223v1): About token-level knowledge integration through a masking strategy that concerns entities and phrases. By using prior knowledge graph of entity relation (e.g. wikipedia) and lexical analysis tools, entity-level and phrase-level texts are masked in chunks. 
     - [Huawei's paper](https://arxiv.org/pdf/1905.07129v1): About fusing entity relationship knowledge graphs through specialized architecture. Compared to above, this method 1) uses separate embedding for entities 2) adds architectural components to fuse entities and tokens 3) does not consider phrases.
    </details>
+1. <details>
+    <summary> Notes will be minimal </summary>
+
+    I messed up and ended up working on applying ERNIE methods to my research. Now due to time constraints (6 hours until EOD), I'll mainly work on implementation and come back to notes.
+   </details>
