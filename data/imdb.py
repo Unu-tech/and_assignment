@@ -1,20 +1,17 @@
-import os
-from re import split
-from typing import Dict, List, Optional, Tuple
+"""
+Lightning datamodule for imdb data
+"""
 
 import lightning as L
-import torch
 from datasets import load_dataset
-from torch.utils.data import DataLoader, random_split
-from torchtext.datasets import IMDB
-from transformers import AutoTokenizer
+from torch.utils.data import DataLoader
+from typing import Optional
 
 
 class IMDBDataModule(L.LightningDataModule):
     """
     PyTorch Lightning DataModule for the IMDB dataset.
-    This module handles downloading, processing, and preparing the IMDB dataset
-    for training, validation, and testing.
+    This module handles preparing the IMDB dataset for training, validation, and testing.
     """
 
     def __init__(
@@ -49,9 +46,8 @@ class IMDBDataModule(L.LightningDataModule):
     def prepare_data(self):
         """
         Download the IMDB dataset if not already available.
-        This method is called only once and on a single GPU.
+        This method is called only once upon initialization.
         """
-        # This will download the dataset if it's not already available
         load_dataset("imdb")
 
     def setup(self, stage: Optional[str] = None):

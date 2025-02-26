@@ -1,3 +1,7 @@
+"""
+Linear probing LightningModule. Assumes binary classification task for now.
+"""
+
 import lightning as L
 import torch
 import torch.nn as nn
@@ -6,6 +10,10 @@ import torcheval.metrics.functional as mF
 
 
 class LinearProbe(L.LightningModule):
+    """
+    LightningModule for attaching linear heads on intermediate states.
+    This module defines how linear heads are trained, validated, and tested.
+    """
     def __init__(self, pt_model):
         super().__init__()
         self.pt_model = pt_model
@@ -28,7 +36,7 @@ class LinearProbe(L.LightningModule):
             self.linears.append(linear)
 
     def forward(self, inputs):
-        if self.pt_model.training == True:
+        if self.pt_model.training is True:
             raise RuntimeError("Attempted unfreezing pretrained model")
 
         with torch.no_grad():

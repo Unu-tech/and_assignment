@@ -9,7 +9,7 @@ install: ## Install all dependencies
 check: pylint pyright ## Run pylint and pyright
 
 pylint: ## Check code smells with pylint
-		python -m pylint --exit-zero src
+		python -m pylint --exit-zero ./
 
 pyright: ## Check type annotations
 		python -m pyright
@@ -17,10 +17,10 @@ pyright: ## Check type annotations
 style: black isort ## Run black and isort
 
 black: ## Auto-format python code using black
-		python -m black src
+		python -m black ./
 
 isort: ## Auto-format python code using isort
-		python -m isort src
+		python -m isort ./
 
 help: # Run `make help` to get help on the make commands
 		@echo "\033[36mAvailable commands:\033[0m"

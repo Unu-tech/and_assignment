@@ -1,7 +1,11 @@
+"""
+Contains training script for linear probe.
+"""
+
+import sys
 import hydra
 import lightning as L
 import torch
-import torch.nn as nn
 from transformers import AutoModel, AutoTokenizer
 
 from data.imdb import IMDBDataModule
@@ -17,6 +21,8 @@ def train_bert_linear_probe(
 ):
     """
     Train a linear probe on top of a pretrained BERT/ERNIE model
+    Loads pretrained model and creates LinearProbe using it
+    Loads pretrained tokenizer and creates DataModule using it
 
     Args:
         pt_name: Name of pretrained model
@@ -71,6 +77,9 @@ def train_bert_linear_probe(
 
 @hydra.main(version_base=None, config_path="configs", config_name="default")
 def main(config):
+    """
+    Takes hydra config and calls training function.
+    """
     print(config)
     sys.exit()
     if config.get("pt_name") is None:
@@ -87,3 +96,4 @@ def main(config):
 if __name__ == "__main__":
     torch.set_float32_matmul_precision("medium")
     main()
+
