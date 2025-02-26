@@ -17,35 +17,26 @@ class IMDBDataModule(L.LightningDataModule):
     
     def __init__(
         self,
-        data_dir: str,
-        pt_model: str,
+        tokenizer,
         max_position_embeddings: int,
         batch_size: int,
-        val_split: float,
         num_workers: int,
     ):
         """
         Initialize the IMDB DataModule.
         
         Args:
-            data_dir: Directory to store the dataset
+            tokenizer: pretrained tokenizer object
+            max_position_embeddings: Maximum sequence length
             batch_size: Batch size for dataloaders
-            val_split: Proportion of training data to use for validation
             num_workers: Number of worker processes for data loading
         """
         super().__init__()
-        self.data_dir = data_dir
 
-        if pt_model == "ERNIE":
-            self.tokenizer = AutoTokenizer.from_pretrained("nghuyong/ernie-2.0-base-en")
-        elif pt_model == "BERT":
-            self.tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-uncased")
-        else:
-            raise NotImplementedError("Other models are not supported")
+        self.tokenizer = tokenizer
 
         self.max_position_embeddings = max_position_embeddings
         self.batch_size = batch_size
-        self.val_split = val_split
         self.num_workers = num_workers
         
         # Will be set in setup()
