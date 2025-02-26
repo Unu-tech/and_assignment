@@ -4,8 +4,8 @@ import torch
 import torch.nn as nn
 from transformers import AutoModel, AutoTokenizer
 
-from src.data.imdb import IMDBDataModule
-from src.models.linear_probe import LinearProbe
+from data.imdb import IMDBDataModule
+from models.linear_probe import LinearProbe
 
 
 def train_bert_linear_probe(
@@ -71,8 +71,8 @@ def train_bert_linear_probe(
 
 @hydra.main(version_base=None, config_path="configs", config_name="default")
 def main(config):
-    #   print(config)
-    #   sys.exit()
+    print(config)
+    sys.exit()
     if config.get("pt_name") is None:
         raise ValueError(
             "Config input is incomplete. Set when calling. E.g.:"
