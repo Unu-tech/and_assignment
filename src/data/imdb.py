@@ -1,12 +1,14 @@
 import os
 from re import split
-import torch
+from typing import Dict, List, Optional, Tuple
+
 import lightning as L
-from torchtext.datasets import IMDB
-from torch.utils.data import DataLoader, random_split
-from transformers import AutoTokenizer
+import torch
 from datasets import load_dataset
-from typing import Optional, List, Tuple, Dict
+from torch.utils.data import DataLoader, random_split
+from torchtext.datasets import IMDB
+from transformers import AutoTokenizer
+
 
 class IMDBDataModule(L.LightningDataModule):
     """
@@ -14,7 +16,7 @@ class IMDBDataModule(L.LightningDataModule):
     This module handles downloading, processing, and preparing the IMDB dataset
     for training, validation, and testing.
     """
-    
+
     def __init__(
         self,
         tokenizer,
@@ -24,7 +26,7 @@ class IMDBDataModule(L.LightningDataModule):
     ):
         """
         Initialize the IMDB DataModule.
-        
+
         Args:
             tokenizer: pretrained tokenizer object
             max_position_embeddings: Maximum sequence length
@@ -38,12 +40,12 @@ class IMDBDataModule(L.LightningDataModule):
         self.max_position_embeddings = max_position_embeddings
         self.batch_size = batch_size
         self.num_workers = num_workers
-        
+
         # Will be set in setup()
         self.train_dataset = None
         self.val_dataset = None
         self.test_dataset = None
-    
+
     def prepare_data(self):
         """
         Download the IMDB dataset if not already available.
@@ -51,26 +53,62 @@ class IMDBDataModule(L.LightningDataModule):
         """
         # This will download the dataset if it's not already available
         load_dataset("imdb")
-    
+
     def setup(self, stage: Optional[str] = None):
         """
         Setup train, validation, and test datasets.
-        
+
         Args:
             stage: 'fit' for training and validation, 'test' for testing
         """
         # Load the full dataset
-        if stage == 'fit' or stage is None:
+        if stage == "fit" or stage is None:
             # Get the training dataset with 25k samples
-            self.train_dataset = load_dataset("imdb", split = "train").map(lambda sample: self.tokenizer(sample["text"], padding="max_length", truncation=True, max_length=self.max_position_embeddings, return_tensors="pt")).set_format(type="torch")
-            
+            self.train_dataset = (
+                load_dataset("imdb", split="train")
+                .map(
+                    lambda sample: self.tokenizer(
+                        sample["text"],
+                        padding="max_length",
+                        truncation=True,
+                        max_length=self.max_position_embeddings,
+                        return_tensors="pt",
+                    )
+                )
+                .set_format(type="torch")
+            )
+
             # Split test dataset and get first 10k samples for validation
-            self.val_dataset = load_dataset("imdb", split='test[:40%]').map(lambda sample: self.tokenizer(sample["text"], padding="max_length", truncation=True, max_length=self.max_position_embeddings, return_tensors="pt")).set_format(type="torch")
-        
-        if stage == 'test' or stage is None:
+            self.val_dataset = (
+                load_dataset("imdb", split="test[:40%]")
+                .map(
+                    lambda sample: self.tokenizer(
+                        sample["text"],
+                        padding="max_length",
+                        truncation=True,
+                        max_length=self.max_position_embeddings,
+                        return_tensors="pt",
+                    )
+                )
+                .set_format(type="torch")
+            )
+
+        if stage == "test" or stage is None:
             # Get the test dataset and get 15k samples for testing
-            self.test_dataset = load_dataset("imdb", split='test[-60%:]').map(lambda sample: self.tokenizer(sample["text"], padding="max_length", truncation=True, max_length=self.max_position_embeddings, return_tensors="pt")).set_format(type="torch")
-    
+            self.test_dataset = (
+                load_dataset("imdb", split="test[-60%:]")
+                .map(
+                    lambda sample: self.tokenizer(
+                        sample["text"],
+                        padding="max_length",
+                        truncation=True,
+                        max_length=self.max_position_embeddings,
+                        return_tensors="pt",
+                    )
+                )
+                .set_format(type="torch")
+            )
+
     def train_dataloader(self) -> DataLoader:
         """Returns the training dataloader."""
         return DataLoader(
@@ -80,7 +118,7 @@ class IMDBDataModule(L.LightningDataModule):
             num_workers=self.num_workers,
             pin_memory=True,
         )
-    
+
     def val_dataloader(self) -> DataLoader:
         """Returns the validation dataloader."""
         return DataLoader(
@@ -90,7 +128,7 @@ class IMDBDataModule(L.LightningDataModule):
             num_workers=self.num_workers,
             pin_memory=True,
         )
-    
+
     def test_dataloader(self) -> DataLoader:
         """Returns the test dataloader."""
         return DataLoader(
