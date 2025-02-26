@@ -68,11 +68,11 @@ class IMDBDataModule(L.LightningDataModule):
                         padding="max_length",
                         truncation=True,
                         max_length=self.max_position_embeddings,
-                        return_tensors="pt",
+#                         return_tensors="pt",
                     )
                 )
-                .set_format(type="torch")
             )
+            self.train_dataset.set_format(type="torch")
 
             # Split test dataset and get first 10k samples for validation
             self.val_dataset = (
@@ -83,11 +83,11 @@ class IMDBDataModule(L.LightningDataModule):
                         padding="max_length",
                         truncation=True,
                         max_length=self.max_position_embeddings,
-                        return_tensors="pt",
+#                         return_tensors="pt",
                     )
                 )
-                .set_format(type="torch")
             )
+            self.val_dataset.set_format(type="torch")
 
         if stage == "test" or stage is None:
             # Get the test dataset and get 15k samples for testing
@@ -99,11 +99,11 @@ class IMDBDataModule(L.LightningDataModule):
                         padding="max_length",
                         truncation=True,
                         max_length=self.max_position_embeddings,
-                        return_tensors="pt",
+#                         return_tensors="pt",
                     )
                 )
-                .set_format(type="torch")
             )
+            self.test_dataset.set_format(type="torch")
 
     def train_dataloader(self) -> DataLoader:
         """Returns the training dataloader."""

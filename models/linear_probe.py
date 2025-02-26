@@ -17,7 +17,7 @@ class LinearProbe(L.LightningModule):
     def __init__(self, pt_model):
         super().__init__()
         self.pt_model = pt_model
-        self.pt_model.freeze()  # freeze pt_model
+        self.pt_model.requires_grad_(False)  # freeze pt_model
         self.pt_model.eval()
 
         # Get model configuration
@@ -44,7 +44,7 @@ class LinearProbe(L.LightningModule):
             outputs = self.pt_model(
                 input_ids=inputs["input_ids"],
                 attention_mask=inputs["attention_mask"],
-                token_type_ids=inputs.get("token_type_ids", None),
+                token_type_ids=inputs["token_type_ids"],
                 output_hidden_states=True,
                 return_dict=True,
             )
@@ -59,7 +59,7 @@ class LinearProbe(L.LightningModule):
             # Get intermediate of CLS
             cls_z = state[:, 0]
             mean_z = torch.mean(state[:, 1:], dim=1)
-            results.append(linear(torch.cat((cls_z, mean_z), dim=-1)))
+            results.append(linear(torch.cat((cls_z, mean_z), dim=-1)).squeeze())
 
         return results
 

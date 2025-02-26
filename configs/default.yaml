@@ -1,4 +1,4 @@
 batch_size: 32
-num_workers: 4
-max_epochs: 100
+num_workers: 8
+max_epochs: 10
 seed: 20250226
