@@ -92,3 +92,13 @@
 
     It's been 3 hours and many tries. I'll create initial buggy code and come back to training.
    </details>
+1. <details>
+    <summary> Cannot use GCP at all... </summary>
+
+    It's been a day and 58 tries across many machines and regions. At this point, I'm thinking about figuring out which aws engine to use...
+
+   I saw some discussions saying unavailability is for cheap VMs or claiming some regions have more GPUs. I tried changing everything, including escalating to expensive VMs and not including GPUs. Still, no luck...
+
+   ![GCP_bad](https://github.com/user-attachments/assets/57844874-7fee-4241-bf45-b170f6bc8389)
+
+   </details>
