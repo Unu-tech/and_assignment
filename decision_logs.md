@@ -74,6 +74,16 @@
     - Only 50k samples which makes evaluation cheap
     - Balanced labels
    </details>
+1. <details>
+    <summary> Simple service design </summary>
+
+    The service will take a single sentence, tokenize it, and report the output probabilities of all linear heads (corresponding to intermediate layers). It will load checkpoint and host from the same machine.
+
+    I had prior experience with only very minimalist module (socket) so I just chose the simplest looking approach which was Flask.
+
+    To make sure I meet the task requirement, I have /comparison endpoint which can be accessed with curl command to post raw json and get results.
+
+   </details>
 
 # Progress notes (encountered issues)
 
@@ -100,5 +110,21 @@
    I saw some discussions saying unavailability is for cheap VMs or claiming some regions have more GPUs. I tried changing everything, including escalating to expensive VMs and not including GPUs. Still, no luck...
 
    ![GCP_bad](https://github.com/user-attachments/assets/57844874-7fee-4241-bf45-b170f6bc8389)
+
+   </details>
+1. Systematically testing different regions worked and GCP is on
+1. <details>
+    <summary> Model training code is finished </summary>
+
+    Since finally obtaining a VM this morning, the followings are done:
+
+    - Repository setup (flat layout, simplest management but only supports dev environment).
+    - Model, data, training codes.
+    - Debugging everything and now training has started.
+   </details>
+1. <details>
+    <summary> Service initial version is finished </summary>
+
+    I also added a landing page which accesses /comparison endpoint and displays the outputs in a table.
 
    </details>
