@@ -4,8 +4,6 @@ Clone the repository locally:
 
 ```bash
 git clone git@github.com:Unu-tech/and_assignment.git
-
-
 ```
 
 <details>
@@ -56,3 +54,10 @@ pyenv local assign
 make install   # install dependencies
 ```
 
+# Training
+
+Please feel free to check relevant configs and `train.sh` to understand how to use. But the easiest way is sourcing `train.sh` which creates logs as well.
+
+```bash
+source train.sh
+```
