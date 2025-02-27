@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Model Comparison Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+            resize: vertical;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #results {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Model Comparison Tool</h1>
+
+    <div class="container">
+        <h2>How It Works</h2>
+        <p>This tool compares the outputs of two language models: BERT and ERNIE.</p>
+        <p>When you submit text, the service processes it through linear probe layers trained on each model and returns activation values for each layer (l1 through l12).</p>
+        <p>These values represent the model's internal representations at different processing depths, helping researchers understand how different models process language.</p>
+    </div>
+
+    <div class="container">
+        <h2>Try It</h2>
+        <form id="comparison-form">
+            <label for="input-text">Enter your text below:</label>
+            <textarea id="input-text" rows="5" placeholder="Enter text for model analysis..."></textarea>
+            <button type="submit" class="btn">Compare Models</button>
+        </form>
+
+        <div id="results">
+            <h3>Comparison Results</h3>
+            <table id="results-table">
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>BERT</th>
+                        <th>ERNIE</th>
+                    </tr>
+                </thead>
+                <tbody id="results-body">
+                    <!-- Results will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('comparison-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const inputText = document.getElementById('input-text').value;
+            if (!inputText.trim()) {
+                alert('Please enter some text to analyze');
+                return;
+            }
+
+            try {
+                const response = await fetch('/comparison', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: inputText })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    displayResults(data);
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to process request'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request');
+            }
+        });
+
+        function displayResults(data) {
+            const tableBody = document.getElementById('results-body');
+            tableBody.innerHTML = '';
+
+            // Assuming l1 through l12 for each model
+            for (let i = 1; i <= 12; i++) {
+                const layerKey = `l${i}`;
+                const row = document.createElement('tr');
+
+                const layerCell = document.createElement('td');
+                layerCell.textContent = layerKey;
+                row.appendChild(layerCell);
+
+                const bertCell = document.createElement('td');
+                bertCell.textContent = data.BERT[layerKey].toFixed(4);
+                row.appendChild(bertCell);
+
+                const ernieCell = document.createElement('td');
+                ernieCell.textContent = data.ERNIE[layerKey].toFixed(4);
+                row.appendChild(ernieCell);
+
+                tableBody.appendChild(row);
+            }
+
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
