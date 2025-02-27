@@ -14,6 +14,7 @@ class LinearProbe(L.LightningModule):
     LightningModule for attaching linear heads on intermediate states.
     This module defines how linear heads are trained, validated, and tested.
     """
+
     def __init__(self, pt_model):
         super().__init__()
         self.pt_model = pt_model

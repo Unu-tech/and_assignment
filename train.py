@@ -4,6 +4,7 @@ Contains training script for linear probe.
 
 import os
 import sys
+
 import hydra
 import lightning as L
 import torch
@@ -81,8 +82,8 @@ def main(config):
     """
     Takes hydra config and calls training function.
     """
-#     print(config)
-#     sys.exit()
+    #     print(config)
+    #     sys.exit()
     if config.get("pt_name") is None:
         raise ValueError(
             "Config input is incomplete. Set when calling. E.g.:"
@@ -99,4 +100,3 @@ if __name__ == "__main__":
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
     main()
-
