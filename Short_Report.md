@@ -105,6 +105,71 @@ The reasoning to use IMDB dataset was as follows:
 1. Then AdamW optimizer with CosineAnnealingWarmRestart learning scheduler is used for optimization.
 1. No tuning was necessary as we are training only linear heads. For evaluation, loss, accuracy, and aucroc scores are reported.
 
+## Experiment result
+
+<details>
+ <summary> Test result comparison </summary>
+ This experiment concerns only one point: Does ERNIE model improve over BERT in terms of linear probing performance on IMDB dataset.
+
+ Following convention, the layer with best performance is reported. For both best and avg, the better score is marked with '*'. Other scores are reported just for completeness and can be ignored.
+
+ It seems, ERNIE indeed results in significant improvement and more informative layers.
+
+ ```bash
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃            BERT           ┃           ERNIE           ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       test_acc_best       │    0.8802666664123535(l12)│   *0.9130666851997375(l11)│
+│       test_acc_avg        │    0.8236112594604492     │   *0.8474501967430115     │
+│       test_acc_l1         │    0.7734666466712952     │    0.8154666423797607     │
+│       test_acc_l2         │     0.784600019454956     │    0.8141999840736389     │
+│       test_acc_l3         │    0.7895333170890808     │    0.8203333616256714     │
+│       test_acc_l4         │    0.7825333476066589     │    0.8141999840736389     │
+│       test_acc_l5         │    0.8054666519165039     │    0.8194000124931335     │
+│       test_acc_l6         │    0.8045333623886108     │    0.8263999819755554     │
+│       test_acc_l7         │     0.823199987411499     │    0.8280666470527649     │
+│       test_acc_l8         │    0.8297333121299744     │    0.8539333343505859     │
+│       test_acc_l9         │    0.8580666780471802     │    0.8628666400909424     │
+│       test_acc_l10        │    0.8740000128746033     │    0.8916000127792358     │
+│       test_acc_l11        │    0.8779333233833313     │    0.9130666851997375     │
+│       test_acc_l12        │    0.8802666664123535     │    0.9098666906356812     │
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       test_auc_best       │   *0.5009904761904762(l1) │    0.5009714285714285(l1) │
+│       test_auc_avg        │    0.5008253968253968     │   *0.5008920634920635     │
+│       test_auc_l1         │    0.5009904761904762     │    0.5009714285714285     │
+│       test_auc_l2         │    0.5008380952380952     │    0.5008952380952381     │
+│       test_auc_l3         │    0.5009523809523809     │    0.5008761904761905     │
+│       test_auc_l4         │          0.5008           │    0.5008952380952381     │
+│       test_auc_l5         │    0.5009142857142858     │    0.5008571428571429     │
+│       test_auc_l6         │    0.5008571428571429     │    0.5009333333333333     │
+│       test_auc_l7         │    0.5007809523809524     │    0.5008952380952381     │
+│       test_auc_l8         │          0.5008           │    0.5008571428571429     │
+│       test_auc_l9         │    0.5006857142857143     │    0.5008571428571429     │
+│       test_auc_l10        │    0.5007428571428572     │    0.5008761904761905     │
+│       test_auc_l11        │    0.5007238095238096     │    0.5008761904761905     │
+│       test_auc_l12        │    0.5008190476190476     │    0.5009142857142858     │
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       test_loss_best      │    0.279394656419754 (l12)│   *0.221735030412674 (l11)│
+│       test_loss_avg       │    0.38537880778312683    │   *0.34269487857818604    │
+│       test_loss_l1        │    0.47110694646835327    │    0.4038117527961731     │
+│       test_loss_l2        │    0.4508618712425232     │    0.3990863561630249     │
+│       test_loss_l3        │    0.4473746120929718     │    0.38896146416664124    │
+│       test_loss_l4        │    0.45696961879730225    │    0.3997490108013153     │
+│       test_loss_l5        │    0.42498746514320374    │    0.39322948455810547    │
+│       test_loss_l6        │    0.41663846373558044    │    0.38312825560569763    │
+│       test_loss_l7        │    0.3901819586753845     │    0.3831392526626587     │
+│       test_loss_l8        │    0.3797227442264557     │    0.3308376371860504     │
+│       test_loss_l9        │    0.3272615969181061     │     0.316272497177124     │
+│       test_loss_l10       │    0.2955033779144287     │    0.2672756612300873     │
+│       test_loss_l11       │    0.2845415472984314     │    0.22173503041267395    │
+│       test_loss_l12       │    0.27939465641975403    │    0.22511084377765656    │
+└───────────────────────────┴───────────────────────────┴───────────────────────────┘
+
+
+ ```
+
+</details>
+
 ## About deployed service
 
 Using Flask, a very simple service was created which has:
